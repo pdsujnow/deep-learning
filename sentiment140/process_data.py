@@ -1,6 +1,8 @@
 from __future__ import print_function
 from csv import reader
 import random
+import re
+
 
 def convert_format(in_file):
 	csvfile = open(in_file)
@@ -19,5 +21,19 @@ def convert_format(in_file):
 		else:
 			print(line[5], file=neufile)
 	csvfile.close()
+	posfile.close()
+	negfile.close()
+	neufile.close()
 
-convert_format("training.csv")
+def parse_sentences(in_file):
+	infile = open(in_file)
+	outfile = open("norm." + in_file, "w")
+	for line in reader(infile):
+		sent = " ".join(re.findall(r"[\w]+[']?[\w]*", line[0].lower()))
+		print(sent, file=outfile)
+	infile.close()
+	outfile.close()
+
+#convert_format("training.csv")
+parse_sentences("train.pos.txt")
+parse_sentences("train.neg.txt")
