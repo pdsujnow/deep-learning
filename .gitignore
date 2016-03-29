@@ -7,3 +7,6 @@
 *.synctex.gz
 *.out
 *.~
+
+*.pkl
+*.d2v
