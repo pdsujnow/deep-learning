@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+    semeval_clean.py
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    This file defines the methods to transform Semeval 2013 training data and testing data
+    into seperate files of positive and negative data files, respectively.
+"""
+
 from string import punctuation
 import re
 from nltk.tokenize import TweetTokenizer

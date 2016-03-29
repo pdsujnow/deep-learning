@@ -1,3 +1,15 @@
+"""
+    process.py
+    ~~~~~~~~~~~~~
+
+    This file defines methods to implement sentiment analysis on Doc2Vec model which is
+    trained through build_model.py file.
+    This file contains the following classifiers:
+        Logistic Regression
+        Support Vector Machine
+
+"""
+
 from gensim import utils
 from gensim.models.doc2vec import LabeledSentence
 from gensim.models import Doc2Vec

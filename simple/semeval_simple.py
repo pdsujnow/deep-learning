@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+    semeval_simple.py
+    ~~~~~~~~~~~~~~~~~~~~
+
+    This file defines the methods to implement basic sentiment analysis on Semeval 2013 tweets data.
+    The classifiers used in this file include:
+        Naive Bayes
+        Decision Tree
+        Maximum Entropy
+        Support Vector Machine
+    The script is based on the Python script provided by Dr. Edmund Yu, which is originally used to
+    implement sentiment analysis on movie reviews.
+"""
 
 
 import nltk
@@ -77,6 +91,7 @@ def extract_features(document, word_features):
 
 
 if __name__ == '__main__':
+    # Please notice that a user needs to provide an option of a specific classifier
     if len(sys.argv) < 2:
         print "-nb  Naive Bayes Classifier"
         print "-dt  Decision Tree Classifier"
@@ -108,7 +123,7 @@ if __name__ == '__main__':
         cPickle.dump(training_set, f)
         cPickle.dump(testing_set, f)
         f.close()
-    
+
     print "Begin classification..."
     classifier = None
     if (sys.argv[1] == '-nb'):
