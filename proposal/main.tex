@@ -25,26 +25,26 @@
 
 \title{Deep Learning for Sentiment Analysis\\
 Term Project Proposal}
-\author{Chunxu Tang\\ 
-Syracuse University
+\author{Chunxu Tang\\
+{\tt ctang02@syr.edu}
 \and
-Zhi Xing\\ 
-Syracuse University}
+Zhi Xing\\
+{\tt zxing01@syr.edu}}
 \date{}
 \maketitle
 
 Due to the ``world of mouth'' phenomenon, mining the social media has become one of the most important tasks in Data Mining. Particularly, Sentiment Analysis on social media is useful for various practical purposes such as brand monitoring, stock prediction, etc. 
-Sentiment Analysis is inherently difficult because of things like negation, sarcasm, etc. in texts, but Machine Learning techniques are able to produce accuracy above 90\% for regular texts such as movie reviews. Unfortunately, the irregularity of social media texts, such as misspelling, informal acronyms and emoticons, makes social-media-oriented text mining extremely difficult. 
+Sentiment Analysis is inherently difficult because of things like negation, sarcasm, etc. in texts, but Machine Learning techniques are able to produce accuracy above 90\% for multi-class classification in regular texts such as movie reviews, arguably better than human. Unfortunately, the irregularities of social-media texts, such as misspelling, informal acronyms, emoticons, etc., make social-media-oriented Sentiment Analysis, or Text Mining in general, extremely difficult. 
 
-The buzzing Deep Learning is dominating pattern recognition in computer vision and voice recognition. As it turned out, it may be good at text classification as well. Various deep neural nets gives state-of-art sentiment polarity classification on Twitter data (about 87\%) \cite{kalchbrenner2014, kim2014, wang2015}. One of the advantages of Deep Learning is its ability to automatically learn features from data, and this ability leads to lots of interesting designs \cite{dos2014, kalchbrenner2014, kim2014, socher2013, wang2015}.
+The buzzing Deep Learning is dominating pattern recognition in computer vision and voice recognition. As it turned out, it may be good at text classification as well. Various deep neural nets achieve state-of-art sentiment-polarity classification on Twitter data (about 87\%) \cite{kalchbrenner2014, kim2014, wang2015}. One of the advantages of Deep Learning is its ability to automatically learn features from data, and this ability leads to lots of interesting designs \cite{dos2014, kalchbrenner2014, kim2014, socher2013, wang2015}.
 
-Our goal of this term project is to get a good understanding of Deep Learning techniques and apply it to social-media Sentiment Analysis. We'll first {\em study} the literature and online article/tutorials to understand different types of deep neural networks, then apply one or two of them on two-class sentiment analysis of Twitter data. We envision the following {\em programming} tasks:
+Our goal of this term project is to get a good understanding of Deep Learning techniques and apply it to social-media sentiment classification. We'll first {\em study} the literature and online articles/tutorials to understand different types of deep neural nets, then apply one or two of them on two-class sentiment classification of Twitter data. We envision the following {\em programming} tasks:
 \begin{itemize}
 \item Data collection (Chunxu)
-\item Logistic regression model with word embeddings (Chunxu)
-\item Recurrent Neural Network with word embeddings (Chunxu) \footnote{\label{ext}This will be done if time allows.}
-\item Convolutional Neural Network with word embeddings (Zhi)
-\item Dynamic Convolutional Neural Network with word embeddings (Zhi) \footref{ext}
+\item Logistic Regression with Word Embeddings (Chunxu)
+\item Recurrent Neural Network with Word Embeddings (Chunxu) \footnote{\label{ext}This will be done if time allows.}
+\item Convolutional Neural Network with Word Embeddings (Zhi)
+\item Dynamic Convolutional Neural Network with Word Embeddings (Zhi) \footref{ext}
 \end{itemize}
 
 \nocite{*}
