@@ -3,6 +3,7 @@ from gensim.models.doc2vec import LabeledSentence
 from gensim.models import Doc2Vec
 import numpy
 from sklearn.linear_model import LogisticRegression
+import sys
 
 
 model = Doc2Vec.load('./sentiment140.d2v')
@@ -12,12 +13,21 @@ model = Doc2Vec.load('./sentiment140.d2v')
 # test_pos_count = 100
 # test_neg_count = 98
 
-train_pos_count = 2290
-train_neg_count = 848
-test_pos_count = 342
-test_neg_count = 175
+if len(sys.argv) < 3:
+    print "Please input train_pos_count and train_neg_count!"
+    sys.exit()
 
-train_arrays = numpy.zeros((train_pos_count + train_neg_count, 50))
+train_pos_count = int(sys.argv[1])
+train_neg_count = int(sys.argv[2])
+test_pos_count = 182
+test_neg_count = 177
+
+print train_pos_count
+print train_neg_count
+
+vec_dim = 100
+
+train_arrays = numpy.zeros((train_pos_count + train_neg_count, vec_dim))
 train_labels = numpy.zeros(train_pos_count + train_neg_count)
 
 for i in range(train_pos_count):
@@ -31,7 +41,7 @@ for i in range(train_neg_count):
     train_labels[train_pos_count + i] = 0
 
 
-test_arrays = numpy.zeros((test_pos_count + test_neg_count, 50))
+test_arrays = numpy.zeros((test_pos_count + test_neg_count, vec_dim))
 test_labels = numpy.zeros(test_pos_count + test_neg_count)
 
 for i in range(test_pos_count):

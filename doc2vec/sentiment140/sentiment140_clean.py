@@ -2,6 +2,7 @@
 from string import punctuation
 import re
 from nltk.tokenize import TweetTokenizer
+import random
 
 
 def write_to_file(file_name, sents):
@@ -31,12 +32,14 @@ def clean_data(input_file_name, output_file_name):
     with open(input_file_name, 'r') as f:
         content = f.readlines()
 
+    if len(content) > 1000:
+        random.shuffle(content)
+        content = content[0:50000]
     tweet_sents = []
     for line in content:
         try:
-            tweet_pair = line.split('\t')
-            tweet = tweet_pair[1]
-            sent = clean_tweet(tweet)
+            sent = clean_tweet(line)
+            tweet_sents.append(sent)
         except UnicodeDecodeError:
             continue
 
