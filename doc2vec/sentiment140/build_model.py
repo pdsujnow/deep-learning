@@ -61,7 +61,7 @@ sources = {'train_pos.txt': 'TRAIN_POS', 'train_neg.txt': 'TRAIN_NEG',
 
 sentences = LabeledLineSentence(sources)
 
-model = Doc2Vec(min_count=1, window=10, size=100, dm_mean=0, sample=1e-5, negative=5, workers=12)
+model = Doc2Vec(min_count=1, window=10, size=100, dm_mean=0, sample=1e-5, negative=5, workers=24)
 
 model.build_vocab(sentences.to_array())
 

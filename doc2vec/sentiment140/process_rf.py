@@ -4,6 +4,7 @@ from gensim.models import Doc2Vec
 import numpy
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 import sys
 
 
@@ -56,8 +57,9 @@ for i in range(test_neg_count):
     test_labels[test_pos_count + i] = 0
 
 
-classifier = LogisticRegression()
-classifier = SVC()
+#classifier = LogisticRegression()
+#classifier = SVC()
+classifier = RandomForestClassifier()
 classifier.fit(train_arrays, train_labels)
 
 print classifier.score(test_arrays, test_labels)
