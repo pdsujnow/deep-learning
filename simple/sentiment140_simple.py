@@ -1,3 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+    sentiment140_simple.py
+    ~~~~~~~~~~~~~~~~~~~~
+
+    This file defines the methods to implement basic sentiment analysis on Sentiment 140 tweets data.
+    The classifiers used in this file include:
+        Naive Bayes
+        Decision Tree
+        Maximum Entropy
+        Support Vector Machine
+    The script is based on the Python script provided by Dr. Edmund Yu, which is originally used to
+    implement sentiment analysis on movie reviews.
+"""
+
 
 import nltk
 from sklearn.svm import LinearSVC
@@ -62,8 +77,8 @@ def get_words_in_tweets(tweets):
 
 def get_word_features(wordlist):
     wordlist = FreqDist(wordlist)
-    # word_features = wordlist.keys() # careful here
-    word_features = [w for (w, c) in wordlist.most_common(2000)] #use most_common() if you want to select the most frequent words
+    # use most_common() if you want to select the most frequent words
+    word_features = [w for (w, c) in wordlist.most_common(2000)]
     return word_features
 
 
@@ -100,15 +115,15 @@ if __name__ == '__main__':
     print "Begin classification..."
     classifier = None
     if (sys.argv[1] == '-nb'):
-        classifier = nltk.NaiveBayesClassifier.train(training_set)  # 0.721470019342
+        classifier = nltk.NaiveBayesClassifier.train(training_set)
     elif (sys.argv[1] == '-dt'):
         classifier = nltk.DecisionTreeClassifier.train(training_set)
     elif (sys.argv[1] == '-me'):
         classifier = nltk.MaxentClassifier.train(training_set, algorithm='iis', max_iter=3)
     elif (sys.argv[1] == '-svm'):
-        classif = SklearnClassifier(LinearSVC())  # 0.661508704062
-        classifier = classif.train(training_set)  # 0.727272727273
+        classif = SklearnClassifier(LinearSVC())
+        classifier = classif.train(training_set)
     else:
         print "Unknown classifier"
 
-    print nltk.classify.accuracy(classifier, testing_set)
+    print "Accuracy:", nltk.classify.accuracy(classifier, testing_set)
