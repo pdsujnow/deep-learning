@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+    sentiment140_clean.py
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    This file defines the methods to clean sentiment140 training and testing data into
+    sentences with clean tokens.
+"""
+
+
 from string import punctuation
 import re
 from nltk.tokenize import TweetTokenizer
@@ -32,6 +41,7 @@ def clean_data(input_file_name, output_file_name):
     with open(input_file_name, 'r') as f:
         content = f.readlines()
 
+    # Please notice that only part of the tweets are used.
     if len(content) > 1000:
         random.shuffle(content)
         content = content[0:100000]

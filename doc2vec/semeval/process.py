@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     process.py
     ~~~~~~~~~~~~~
@@ -6,9 +7,9 @@
     trained through build_model.py file.
     This file contains the following classifiers:
         Logistic Regression
-        Support Vector Machine
-
+    The content of this file is based on the reference https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
 """
+
 
 from gensim import utils
 from gensim.models.doc2vec import LabeledSentence
@@ -31,6 +32,8 @@ test_pos_count = 342
 # test_neu_count = 422
 test_neg_count = 175
 
+
+print "Build training data set..."
 train_arrays = numpy.zeros((train_pos_count + train_neg_count, 20))
 train_labels = numpy.zeros(train_pos_count + train_neg_count)
 
@@ -51,6 +54,7 @@ for i in range(train_neg_count):
 #     train_labels[prev_count + i] = 2
 
 
+print "Build testing data set..."
 test_arrays = numpy.zeros((test_pos_count + test_neg_count, 20))
 test_labels = numpy.zeros(test_pos_count + test_neg_count)
 
@@ -72,7 +76,8 @@ for i in range(test_neg_count):
 #     test_labels[prev_count + i] = 2
 
 
+print "Begin classification..."
 classifier = LogisticRegression()
 classifier.fit(train_arrays, train_labels)
 
-print classifier.score(test_arrays, test_labels)
+print "Accuracy:", classifier.score(test_arrays, test_labels)
