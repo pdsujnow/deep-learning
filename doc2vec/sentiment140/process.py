@@ -10,6 +10,7 @@
         Support Vector Machine
         Random Forest
         K-Nearest Neighbors
+
     The content of this file is based on the reference:
     https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
 

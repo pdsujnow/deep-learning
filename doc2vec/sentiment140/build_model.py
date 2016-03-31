@@ -5,6 +5,7 @@
 
     This file defines methods to build doc2vec models from files with positive and negative
     tweets for training and testing. The data is from sentiment140 data set.
+
     The script is based on the approach show in
     https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
 """

@@ -9,6 +9,7 @@
         Decision Tree
         Maximum Entropy
         Support Vector Machine
+
     The script is based on the Python script provided by Dr. Edmund Yu, which is originally used to
     implement sentiment analysis on movie reviews.
 
