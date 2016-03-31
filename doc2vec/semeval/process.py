@@ -7,7 +7,8 @@
     trained through build_model.py file.
     This file contains the following classifiers:
         Logistic Regression
-    The content of this file is based on the reference https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
+    The content of this file is based on the reference:
+    https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
 """
 
 

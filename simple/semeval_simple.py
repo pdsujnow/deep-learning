@@ -11,6 +11,9 @@
         Support Vector Machine
     The script is based on the Python script provided by Dr. Edmund Yu, which is originally used to
     implement sentiment analysis on movie reviews.
+
+    Usage of this script:
+        python semeval_simple.py -[nb/dt/me/svm]
 """
 
 
@@ -127,12 +130,16 @@ if __name__ == '__main__':
     print "Begin classification..."
     classifier = None
     if (sys.argv[1] == '-nb'):
+        print "Naive Bayes is used..."
         classifier = nltk.NaiveBayesClassifier.train(training_set)
     elif (sys.argv[1] == '-dt'):
+        print "Decision Tree is used..."
         classifier = nltk.DecisionTreeClassifier.train(training_set)
     elif (sys.argv[1] == '-me'):
+        print "Max Entropy is used..."
         classifier = nltk.MaxentClassifier.train(training_set, algorithm='iis', max_iter=3)
     elif (sys.argv[1] == '-svm'):
+        print "Support Vector Machine is used..."
         classif = SklearnClassifier(LinearSVC())
         classifier = classif.train(training_set)
     else:

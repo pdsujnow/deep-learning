@@ -12,6 +12,9 @@
         K-Nearest Neighbors
     The content of this file is based on the reference:
     https://github.com/linanqiu/word2vec-sentiments/blob/master/word2vec-sentiment.ipynb
+
+    The usage is this script is:
+        python process.py [train_pos_count] [train_neg_count] -[lr/svm/rf/knn]
 """
 
 
@@ -80,12 +83,16 @@ for i in range(test_neg_count):
 print "Begin classification..."
 classifier = None
 if sys.argv[3] == '-lr':
+    print "Logistic Regressions is used..."
     classifier = LogisticRegression()
 elif sys.argv[3] == '-svm':
+    print "Support Vector Machine is used..."
     classifier = SVC()
 elif sys.argv[3] == '-knn':
+    print "K-Nearest Neighbors is used..."
     classifier = KNeighborsClassifier(n_neighbors=10)
 elif sys.argv[3] == '-rf':
+    print "Random Forest is used..."
     classifier = RandomForestClassifier()
 
 classifier.fit(train_arrays, train_labels)
