@@ -25,26 +25,26 @@ def prepare_data(seqs, labels, maxlen=None):
     # x: a list of sentences
     lengths = [len(s) for s in seqs]
 
-    if maxlen is not None:
-        new_seqs = []
-        new_labels = []
-        new_lengths = []
-        for l, s, y in zip(lengths, seqs, labels):
-            if l < maxlen:
-                new_seqs.append(s)
-                new_labels.append(y)
-                new_lengths.append(l)
-        lengths = new_lengths
-        labels = new_labels
-        seqs = new_seqs
-
-        if len(lengths) < 1:
-            return None, None, None
+    # if maxlen is not None:
+    #     new_seqs = []
+    #     new_labels = []
+    #     new_lengths = []
+    #     for l, s, y in zip(lengths, seqs, labels):
+    #         if l < maxlen:
+    #             new_seqs.append(s)
+    #             new_labels.append(y)
+    #             new_lengths.append(l)
+    #     lengths = new_lengths
+    #     labels = new_labels
+    #     seqs = new_seqs
+    #
+    #     if len(lengths) < 1:
+    #         return None, None, None
 
     n_samples = len(seqs)
     maxlen = numpy.max(lengths)
 
-    x = numpy.zeros((maxlen, n_samples)).astype('int64')
+    x = numpy.zeros((maxlen, n_samples)).astype('float32')
     x_mask = numpy.zeros((maxlen, n_samples)).astype(theano.config.floatX)
     for idx, s in enumerate(seqs):
         x[:lengths[idx], idx] = s
@@ -81,7 +81,7 @@ def get_dataset_file(dataset, default_dataset, origin):
     return dataset
 
 
-def load_data(path="semeval.pkl", n_words=100000, valid_portion=0.1, maxlen=None,
+def load_data(path="tweets.pkl", n_words=100000, valid_portion=0.1, maxlen=None,
               sort_by_len=True):
     '''Loads the dataset
 
@@ -120,15 +120,15 @@ def load_data(path="semeval.pkl", n_words=100000, valid_portion=0.1, maxlen=None
     train_set = pickle.load(f)
     test_set = pickle.load(f)
     f.close()
-    if maxlen:
-        new_train_set_x = []
-        new_train_set_y = []
-        for x, y in zip(train_set[0], train_set[1]):
-            if len(x) < maxlen:
-                new_train_set_x.append(x)
-                new_train_set_y.append(y)
-        train_set = (new_train_set_x, new_train_set_y)
-        del new_train_set_x, new_train_set_y
+    # if maxlen:
+    #     new_train_set_x = []
+    #     new_train_set_y = []
+    #     for x, y in zip(train_set[0], train_set[1]):
+    #         if len(x) < maxlen:
+    #             new_train_set_x.append(x)
+    #             new_train_set_y.append(y)
+    #     train_set = (new_train_set_x, new_train_set_y)
+    #     del new_train_set_x, new_train_set_y
 
     # split training set into validation set
     train_set_x, train_set_y = train_set
@@ -184,10 +184,6 @@ def load_data(path="semeval.pkl", n_words=100000, valid_portion=0.1, maxlen=None
     #print(train[1])
     print("load completes")
     return train, valid, test
-
-
-if __name__ == '__main__':
-    load_data()
 
 # a = cPickle.load(f)
 # a => tuple

@@ -370,14 +370,14 @@ def build_model(tparams, options):
     # Used for dropout.
     use_noise = theano.shared(numpy_floatX(0.))
 
-    x = tensor.matrix('x', dtype='int64')
+    x = tensor.matrix('x', dtype='float32')
     mask = tensor.matrix('mask', dtype=config.floatX)
-    y = tensor.vector('y', dtype='int64')
+    y = tensor.vector('y', dtype='float32')
 
     n_timesteps = x.shape[0]
     n_samples = x.shape[1]
 
-    emb = tparams['Wemb'][x.flatten()].reshape([n_timesteps,
+    emb = tparams['Wemb'][x.flatten().astype('int64')].reshape([n_timesteps,
                                                 n_samples,
                                                 options['dim_proj']])
     proj = get_layer(options['encoder'])[1](tparams, emb, options,
@@ -398,7 +398,7 @@ def build_model(tparams, options):
     if pred.dtype == 'float16':
         off = 1e-6
 
-    cost = -tensor.log(pred[tensor.arange(n_samples), y] + off).mean()
+    cost = -tensor.log(pred[tensor.arange(n_samples), y.astype('int64')] + off).mean()
 
     return use_noise, x, mask, y, f_pred_prob, f_pred, cost
 
@@ -480,14 +480,14 @@ def train_lstm(
     print('Loading data')
     train, valid, test = load_data(n_words=n_words, valid_portion=0.05,
                                    maxlen=maxlen)
-    if test_size > 0:
-        # The test set is sorted by size, but we want to keep random
-        # size example.  So we must select a random selection of the
-        # examples.
-        idx = numpy.arange(len(test[0]))
-        numpy.random.shuffle(idx)
-        idx = idx[:test_size]
-        test = ([test[0][n] for n in idx], [test[1][n] for n in idx])
+    # if test_size > 0:
+    #     # The test set is sorted by size, but we want to keep random
+    #     # size example.  So we must select a random selection of the
+    #     # examples.
+    #     idx = numpy.arange(len(test[0]))
+    #     numpy.random.shuffle(idx)
+    #     idx = idx[:test_size]
+    #     test = ([test[0][n] for n in idx], [test[1][n] for n in idx])
 
     ydim = numpy.max(train[1]) + 1
 
@@ -567,6 +567,10 @@ def train_lstm(
                 # Return something of shape (minibatch maxlen, n samples)
                 x, mask, y = prepare_data(x, y)
                 n_samples += x.shape[1]
+
+                # print(x)
+                # print(mask)
+                # print(y)
 
                 cost = f_grad_shared(x, mask, y)
                 f_update(lrate)
@@ -653,5 +657,5 @@ if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
         max_epochs=100,
-        test_size=500,
+        test_size=-1,
     )
