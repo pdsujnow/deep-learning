@@ -61,10 +61,10 @@ if __name__ == '__main__':
     print test_x
 
     f = open('semeval.pkl', 'wb')
-    cPickle.dump(train_x, train_y), f, -1)
-    cPickle.dump(test_x, test_y), f, -1)
+    cPickle.dump((train_x, train_y), f, -1)
+    cPickle.dump((test_x, test_y), f, -1)
     f.close()
 
     f = open('semeval.dict.pkl', 'wb')
-    cPickle.dump(dictionary, f, -1)
+    cPickle.dump(word_dict, f, -1)
     f.close()
