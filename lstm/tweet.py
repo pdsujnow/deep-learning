@@ -120,15 +120,15 @@ def load_data(path="semeval.pkl", n_words=100000, valid_portion=0.1, maxlen=None
     train_set = pickle.load(f)
     test_set = pickle.load(f)
     f.close()
-    # if maxlen:
-    #     new_train_set_x = []
-    #     new_train_set_y = []
-    #     for x, y in zip(train_set[0], train_set[1]):
-    #         if len(x) < maxlen:
-    #             new_train_set_x.append(x)
-    #             new_train_set_y.append(y)
-    #     train_set = (new_train_set_x, new_train_set_y)
-    #     del new_train_set_x, new_train_set_y
+    if maxlen:
+        new_train_set_x = []
+        new_train_set_y = []
+        for x, y in zip(train_set[0], train_set[1]):
+            if len(x) < maxlen:
+                new_train_set_x.append(x)
+                new_train_set_y.append(y)
+        train_set = (new_train_set_x, new_train_set_y)
+        del new_train_set_x, new_train_set_y
 
     # split training set into validation set
     train_set_x, train_set_y = train_set
