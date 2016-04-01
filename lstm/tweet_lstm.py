@@ -16,11 +16,18 @@ import theano.tensor as tensor
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 import tweet
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger()
+logger.addHandler(logging.FileHandler('lstm.log', 'a'))
+#print = logger.info
 
 datasets = {'imdb': (tweet.load_data, tweet.prepare_data)}
 
 # Set the random number generators' seeds for consistency
-SEED = 123
+SEED = 100
 numpy.random.seed(SEED)
 
 def numpy_floatX(data):
@@ -594,6 +601,7 @@ def train_lstm(
                     print('Done')
 
                 if numpy.mod(uidx, validFreq) == 0:
+                    print('Compute error')
                     use_noise.set_value(0.)
                     train_err = pred_error(f_pred, prepare_data, train, kf)
                     valid_err = pred_error(f_pred, prepare_data, valid,
@@ -657,5 +665,5 @@ if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
         max_epochs=100,
-        test_size=-1,
+        test_size=350,
     )

@@ -23,22 +23,22 @@ def prepare_data(seqs, labels, maxlen=None):
     # x: a list of sentences
     lengths = [len(s) for s in seqs]
 
-    # if maxlen is not None:
-    #     new_seqs = []
-    #     new_labels = []
-    #     new_lengths = []
-    #     for l, s, y in zip(lengths, seqs, labels):
-    #         if l < maxlen:
-    #             new_seqs.append(s)
-    #             new_labels.append(y)
-    #             new_lengths.append(l)
-    #     lengths = new_lengths
-    #     labels = new_labels
-    #     seqs = new_seqs
-    #
-    #     if len(lengths) < 1:
-    #         print("None is returned")
-    #         return None, None, None
+    if maxlen is not None:
+        new_seqs = []
+        new_labels = []
+        new_lengths = []
+        for l, s, y in zip(lengths, seqs, labels):
+            if l < maxlen:
+                new_seqs.append(s)
+                new_labels.append(y)
+                new_lengths.append(l)
+        lengths = new_lengths
+        labels = new_labels
+        seqs = new_seqs
+
+        if len(lengths) < 1:
+            print("None is returned")
+            return None, None, None
 
     n_samples = len(seqs)
     maxlen = numpy.max(lengths)
@@ -49,9 +49,9 @@ def prepare_data(seqs, labels, maxlen=None):
         x[:lengths[idx], idx] = s
         x_mask[:lengths[idx], idx] = 1.
 
-    print(x)
-    print(x_mask)
-    print(labels)
+    #print(x)
+    #print(x_mask)
+    #print(labels)
     return x, x_mask, labels
 
 

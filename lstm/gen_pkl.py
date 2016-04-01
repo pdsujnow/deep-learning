@@ -2,14 +2,14 @@ import numpy
 from gensim.models import Doc2Vec
 from six.moves import cPickle
 
-model = Doc2Vec.load('../doc2vec/sentiment140/sentiment.d2v')
+model = Doc2Vec.load('../doc2vec/sentiment140/sentiment140.d2v')
 train_sents = []
 train_labels = []
 test_sents = []
 test_labels = []
 
-train_pos_count = 98912
-train_neg_count = 99309
+train_pos_count = 50000 #98912
+train_neg_count = 50000 #99309
 test_pos_count = 182
 test_neg_count = 177
 
