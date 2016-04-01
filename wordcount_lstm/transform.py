@@ -22,7 +22,7 @@ def build_dict(file_names):
     keys = word_dict.keys()
 
     sorted_idx = numpy.argsort(counts)[:-1]
-    print "sorted_idx", sorted_idx
+    # print "sorted_idx", sorted_idx
 
     worddict = dict()
     for idx, ss in enumerate(sorted_idx):
@@ -42,7 +42,7 @@ def grab_data(path, dictionary):
         words = ss.split()
         seqs[idx] = [dictionary[w] if w in dictionary else 1 for w in words]
 
-    print seqs
+    # print seqs
     return seqs
 
 
@@ -58,7 +58,6 @@ if __name__ == '__main__':
     test_x_neg = grab_data('test_neg.txt', word_dict)
     test_x = test_x_pos + test_x_neg
     test_y = [1] * len(test_x_pos) + [0] * len(test_x_neg)
-    print test_x
 
     f = open('tweet.pkl', 'wb')
     cPickle.dump((train_x, train_y), f, -1)
