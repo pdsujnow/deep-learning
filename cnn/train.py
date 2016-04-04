@@ -3,6 +3,7 @@
 # TODO(Zhi):
 #   1. change it to tf.app
 #   2. make input file flags mandatory
+#   3. write a new class for TextCNN
 
 import tensorflow as tf
 import numpy as np
@@ -23,16 +24,16 @@ tf.flags.DEFINE_string("out_dir", None, "Output directory.")
 
 # Model Hyperparameters
 tf.flags.DEFINE_integer("embedding_dim", 200, "Dimensionality of character embedding (default: 200)")
-tf.flags.DEFINE_string("filter_sizes", "1,2,3", "Comma-separated filter sizes (default: '1,2,3')")
+tf.flags.DEFINE_string("filter_sizes", "3, 4, 5", "Comma-separated filter sizes (default: '3, 4, 5')")
 tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularizaion lambda (default: 0.0)")
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 128)")
-tf.flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 200)")
+tf.flags.DEFINE_integer("num_epochs", 100, "Number of training epochs (default: 100)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
-tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
+tf.flags.DEFINE_integer("checkpoint_every", 0, "Save model after this many steps (default: 0)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -178,7 +179,6 @@ with tf.Graph().as_default():
             if current_step % FLAGS.evaluate_every == 0:
                 print("Evaluation:")
                 dev_step(x_dev, y_dev, writer=dev_summary_writer)
-                #print("")
-            if current_step % FLAGS.checkpoint_every == 0:
+            if FLAGS.checkpoint_every > 0 and current_step % FLAGS.checkpoint_every == 0:
                 path = saver.save(sess, checkpoint_prefix, global_step=current_step)
-                print("Saved model checkpoint to {}\n".format(path))
+                print("Saved model checkpoint to {}".format(path))

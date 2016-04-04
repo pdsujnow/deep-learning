@@ -1,6 +1,8 @@
 import tensorflow as tf
 import numpy as np
 
+# TODO(Zhi):
+#   1. move loading embedding model to this class
 
 class TextCNN(object):
     """
@@ -23,6 +25,7 @@ class TextCNN(object):
         with tf.device('/cpu:0'), tf.name_scope("embedding"):
             emb = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
+                trainable=False, # fixed embeddings
                 name="W")
             self.embedded_chars = tf.nn.embedding_lookup(emb, self.input_x)
             self.embedded_chars_expanded = tf.expand_dims(self.embedded_chars, -1)
