@@ -11,3 +11,5 @@
 *.pkl
 *.d2v*
 *.pyc
+checkpoint
+model.ckpt*
