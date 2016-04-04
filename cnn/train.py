@@ -24,14 +24,14 @@ tf.flags.DEFINE_string("out_dir", None, "Output directory.")
 
 # Model Hyperparameters
 tf.flags.DEFINE_integer("embedding_dim", 200, "Dimensionality of character embedding (default: 200)")
-tf.flags.DEFINE_string("filter_sizes", "3, 4, 5", "Comma-separated filter sizes (default: '3, 4, 5')")
+tf.flags.DEFINE_string("filter_sizes", "1,2,3", "Comma-separated filter sizes (default: \"1,2,3\")")
 tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularizaion lambda (default: 0.0)")
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 128)")
-tf.flags.DEFINE_integer("num_epochs", 100, "Number of training epochs (default: 100)")
+tf.flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 200)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 0, "Save model after this many steps (default: 0)")
 
@@ -94,7 +94,7 @@ with tf.Graph().as_default():
         optimizer = tf.train.AdamOptimizer(1e-4)
         grads_and_vars = optimizer.compute_gradients(cnn.loss)
         train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
-
+        """
         # Keep track of gradient values and sparsity (optional)
         grad_summaries = []
         for g, v in grads_and_vars:
@@ -128,6 +128,7 @@ with tf.Graph().as_default():
         checkpoint_prefix = os.path.join(checkpoint_dir, "model")
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
+        """
         saver = tf.train.Saver(tf.all_variables())
         if (FLAGS.model_file):
             cnn.embedding_saver.restore(sess, FLAGS.model_file)
@@ -144,12 +145,15 @@ with tf.Graph().as_default():
               cnn.input_y: y_batch,
               cnn.dropout_keep_prob: FLAGS.dropout_keep_prob
             }
-            _, step, summaries, loss, accuracy = sess.run(
-                [train_op, global_step, train_summary_op, cnn.loss, cnn.accuracy],
+            #_, step, summaries, loss, accuracy = sess.run(
+                #[train_op, global_step, train_summary_op, cnn.loss, cnn.accuracy],
+                #feed_dict)
+            _, step, loss, accuracy = sess.run(
+                [train_op, global_step, cnn.loss, cnn.accuracy],
                 feed_dict)
             #time_str = datetime.datetime.now().isoformat()
             #print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            train_summary_writer.add_summary(summaries, step)
+            #train_summary_writer.add_summary(summaries, step)
 
         def dev_step(x_batch, y_batch, writer=None):
             """
@@ -160,13 +164,16 @@ with tf.Graph().as_default():
               cnn.input_y: y_batch,
               cnn.dropout_keep_prob: 1.0
             }
-            step, summaries, loss, accuracy = sess.run(
-                [global_step, dev_summary_op, cnn.loss, cnn.accuracy],
+            #step, summaries, loss, accuracy = sess.run(
+                #[global_step, dev_summary_op, cnn.loss, cnn.accuracy],
+                #feed_dict)
+            step, loss, accuracy = sess.run(
+                [global_step, cnn.loss, cnn.accuracy],
                 feed_dict)
             time_str = datetime.datetime.now().isoformat()
             print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
-            if writer:
-                writer.add_summary(summaries, step)
+            #if writer:
+                #writer.add_summary(summaries, step)
 
         # Generate batches
         batches = data_helpers.batch_iter(
@@ -177,8 +184,9 @@ with tf.Graph().as_default():
             train_step(x_batch, y_batch)
             current_step = tf.train.global_step(sess, global_step)
             if current_step % FLAGS.evaluate_every == 0:
-                print("Evaluation:")
-                dev_step(x_dev, y_dev, writer=dev_summary_writer)
-            if FLAGS.checkpoint_every > 0 and current_step % FLAGS.checkpoint_every == 0:
-                path = saver.save(sess, checkpoint_prefix, global_step=current_step)
-                print("Saved model checkpoint to {}".format(path))
+                #print("Evaluation:")
+                #dev_step(x_dev, y_dev, writer=dev_summary_writer)
+                dev_step(x_dev, y_dev)
+            #if FLAGS.checkpoint_every > 0 and current_step % FLAGS.checkpoint_every == 0:
+                #path = saver.save(sess, checkpoint_prefix, global_step=current_step)
+                #print("Saved model checkpoint to {}".format(path))
