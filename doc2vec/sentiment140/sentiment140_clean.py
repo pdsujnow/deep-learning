@@ -44,7 +44,7 @@ def clean_data(input_file_name, output_file_name):
     # Please notice that only part of the tweets are used.
     if len(content) > 1000:
         random.shuffle(content)
-        content = content[0:2000]
+        content = content[0:2000]  # To improve accuracy, I need to adjust the number.
     tweet_sents = []
     for line in content:
         try:
