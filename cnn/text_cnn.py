@@ -3,6 +3,9 @@ import numpy as np
 
 # TODO(Zhi):
 #   1. move loading embedding model to this class
+#   2. move training, validating to this class
+#   3. write save/load function
+#   4. write test function
 
 class TextCNN(object):
     """

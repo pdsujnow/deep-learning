@@ -4,6 +4,8 @@
 #   1. change it to tf.app
 #   2. make input file flags mandatory
 #   3. write a new class for TextCNN
+#   4. use trainable word embeddings with small vocabulary
+#   5. use non-trainable word embeddings with small vocabulary
 
 import tensorflow as tf
 import numpy as np
