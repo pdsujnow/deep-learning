@@ -22,33 +22,34 @@ from text_cnn import TextCNN
 tf.flags.DEFINE_string("pos_file", None, "File containing positive examples.")
 tf.flags.DEFINE_string("neg_file", None, "File containing negative examples.")
 
-tf.flags.DEFINE_string("out_dir", None, "Output directory.")
+# Parameters for loading embeddings
+tf.flags.DEFINE_string("model_file", None, "Path to model file.")
+tf.flags.DEFINE_string("vocab_file", None, "Path to vocabulary file.")
+
+tf.flags.DEFINE_integer("sequence_length", 200, "The length of a sequence of words (default: 200)")
+tf.flags.DEFINE_string("output_dir", None, "Directory for saving checkpoints.")
 
 # Model Hyperparameters
 tf.flags.DEFINE_integer("embedding_dim", 200, "Dimensionality of character embedding (default: 200)")
 tf.flags.DEFINE_string("filter_sizes", "1,2,3", "Comma-separated filter sizes (default: \"1,2,3\")")
-tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
+tf.flags.DEFINE_integer("num_filters", 256, "Number of filters per filter size (default: 256)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularizaion lambda (default: 0.0)")
 
 # Training parameters
-tf.flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 128)")
+tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
 tf.flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 200)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
-tf.flags.DEFINE_integer("checkpoint_every", 0, "Save model after this many steps (default: 0)")
+tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
 tf.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on devices")
 
-# Parameters for loading embeddings
-tf.flags.DEFINE_string("model_file", None, "Path to model file.")
-tf.flags.DEFINE_string("vocab_file", None, "Path to vocabulary file.")
-
 FLAGS = tf.flags.FLAGS
-FLAGS.batch_size
+FLAGS._parse_flags()
 print("\nParameters:")
-for attr, value in sorted(FLAGS.__flags.iteritems()):
+for attr, value in sorted(FLAGS.__flags.items()):
     print("{}={}".format(attr.upper(), value))
 print("")
 
@@ -59,7 +60,7 @@ print("")
 # Load data
 print("Loading data...")
 x, y, word2id, id2word = data_helpers.load_data(FLAGS.vocab_file, FLAGS.pos_file, 
-    FLAGS.neg_file)
+    FLAGS.neg_file, FLAGS.sequence_length)
 # Randomly shuffle data
 np.random.seed(10)
 shuffle_indices = np.random.permutation(np.arange(len(y)))
@@ -70,7 +71,7 @@ y_shuffled = y[shuffle_indices]
 x_train, x_dev = x_shuffled[:-1000], x_shuffled[-1000:]
 y_train, y_dev = y_shuffled[:-1000], y_shuffled[-1000:]
 print("Vocabulary Size: {:d}".format(len(word2id)))
-print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
+print("Train/Dev split: {:d}/{:d}\n".format(len(y_train), len(y_dev)))
 
 
 # Training
@@ -83,17 +84,17 @@ with tf.Graph().as_default():
     sess = tf.Session(config=session_conf)
     with sess.as_default():
         cnn = TextCNN(
-            sequence_length=x_train.shape[1],
+            sequence_length=FLAGS.sequence_length,
             num_classes=2,
             vocab_size=len(word2id),
             embedding_size=FLAGS.embedding_dim,
-            filter_sizes=map(int, FLAGS.filter_sizes.split(",")),
+            filter_sizes=list(map(int, FLAGS.filter_sizes.split(","))),
             num_filters=FLAGS.num_filters,
             l2_reg_lambda=FLAGS.l2_reg_lambda)
 
         # Define Training procedure
         global_step = tf.Variable(0, name="global_step", trainable=False)
-        optimizer = tf.train.AdamOptimizer(1e-4)
+        optimizer = tf.train.AdamOptimizer(1e-3)
         grads_and_vars = optimizer.compute_gradients(cnn.loss)
         train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
         """
@@ -124,13 +125,13 @@ with tf.Graph().as_default():
         dev_summary_op = tf.merge_summary([loss_summary, acc_summary])
         dev_summary_dir = os.path.join(FLAGS.out_dir, "summaries", "dev")
         dev_summary_writer = tf.train.SummaryWriter(dev_summary_dir, sess.graph_def)
-
+        """
         # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
-        checkpoint_dir = os.path.abspath(os.path.join(FLAGS.out_dir, "checkpoints"))
+        checkpoint_dir = os.path.abspath(os.path.join(FLAGS.output_dir, "checkpoints"))
         checkpoint_prefix = os.path.join(checkpoint_dir, "model")
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
-        """
+        
         saver = tf.train.Saver(tf.all_variables())
         if (FLAGS.model_file):
             cnn.embedding_saver.restore(sess, FLAGS.model_file)
@@ -153,6 +154,7 @@ with tf.Graph().as_default():
             _, step, loss, accuracy = sess.run(
                 [train_op, global_step, cnn.loss, cnn.accuracy],
                 feed_dict)
+
             #time_str = datetime.datetime.now().isoformat()
             #print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
             #train_summary_writer.add_summary(summaries, step)
@@ -179,7 +181,7 @@ with tf.Graph().as_default():
 
         # Generate batches
         batches = data_helpers.batch_iter(
-            zip(x_train, y_train), FLAGS.batch_size, FLAGS.num_epochs)
+            list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
         # Training loop. For each batch...
         for batch in batches:
             x_batch, y_batch = zip(*batch)
@@ -189,6 +191,6 @@ with tf.Graph().as_default():
                 #print("Evaluation:")
                 #dev_step(x_dev, y_dev, writer=dev_summary_writer)
                 dev_step(x_dev, y_dev)
-            #if FLAGS.checkpoint_every > 0 and current_step % FLAGS.checkpoint_every == 0:
-                #path = saver.save(sess, checkpoint_prefix, global_step=current_step)
-                #print("Saved model checkpoint to {}".format(path))
+            if FLAGS.checkpoint_every > 0 and current_step % FLAGS.checkpoint_every == 0:
+                path = saver.save(sess, checkpoint_prefix, global_step=current_step)
+                print("Saved model checkpoint to {}".format(path))
