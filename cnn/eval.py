@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import tensorflow as tf
 import numpy as np
 import os
@@ -11,15 +9,15 @@ from text_cnn import TextCNN
 # Parameters
 # ==================================================
 
-# Data files
+# Files and directories
 tf.flags.DEFINE_string("pos_file", None, "File containing positive examples.")
 tf.flags.DEFINE_string("neg_file", None, "File containing negative examples.")
 tf.flags.DEFINE_string("vocab_file", None, "Path to vocabulary file.")
+tf.flags.DEFINE_string("checkpoint_dir", None, "Checkpoint directory from training run")
 
 # Eval Parameters
 tf.flags.DEFINE_integer("sequence_length", 200, "The length of a sequence of words (default: 200)")
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
-tf.flags.DEFINE_string("checkpoint_dir", "", "Checkpoint directory from training run")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -33,10 +31,14 @@ for attr, value in sorted(FLAGS.__flags.items()):
     print("{}={}".format(attr.upper(), value))
 print("")
 
+if not FLAGS.pos_file or not FLAGS.neg_file or not FLAGS.vocab_file or not FLAGS.checkpoint_dir:
+    print("--pos_file, --neg_file, --vocab_file and --checkpoint_dir must be specified.")
+    sys.exit(1)
+
 # Load data. Load your own data here
 print("Loading data...")
 x_test, y_test, word2id, id2word = data_helpers.load_data(FLAGS.vocab_file, FLAGS.pos_file, 
-    FLAGS.neg_file, FLAGS.sequence_length)
+    FLAGS.neg_file, FLAGS.sequence_length, 1000)
 y_test = np.argmax(y_test, axis=1)
 print("Vocabulary size: {:d}".format(len(word2id)))
 print("Test set size {:d}".format(len(y_test)))

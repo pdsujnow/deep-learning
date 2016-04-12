@@ -1,5 +1,6 @@
 import numpy as np
 import re
+import random
 import itertools
 from collections import Counter
 from csv import reader
@@ -8,12 +9,11 @@ from nltk.corpus import stopwords
 from string import punctuation
 
 
-def clean_str(string):
+def tokenize_str(string):
     """
-    Tokenization/string cleaning for all datasets except for SST.
-    Original taken from 
-    https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
+    Tokenize a string.
     """
+    #string = re.sub(r"(?:\@|https?\://)\S+", "", string.lower())
     string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
@@ -27,42 +27,30 @@ def clean_str(string):
     string = re.sub(r"\)", " \) ", string)
     string = re.sub(r"\?", " \? ", string)
     string = re.sub(r"\s{2,}", " ", string)
-    return string.strip().lower()
-
-
-def clean_tweet(tweet):
     tknzr = TweetTokenizer()
-    try:
-        tweet = re.sub(r"(?:\@|https?\://)\S+", "", tweet.lower())
-        tweet = ' '.join(tweet.split())
-        words = tknzr.tokenize(tweet)
-        words = [''.join(c for c in s if c not in punctuation) for s in words]
-        words = [s for s in words if s]
-    except UnicodeDecodeError:
-        return []
-
-    #sent = " ".join(words)
-    #return sent
+    words = tknzr.tokenize(string.lower())
+    words = [word for word in words if len(word) > 0 and word not in punctuation]
     return words
 
 
-def load_data_and_labels(pos_file, neg_file):
+def load_data_and_labels(pos_file, neg_file, sample_size):
     """
-    Loads MR polarity data from files, splits the data into words and generates 
+    Loads polarity data from files, splits the data into words and generates 
         labels.
     Returns split sentences and labels.
     """
     # Load data from files
-    positive_examples = list(open(pos_file, "r").readlines()[:15000])
+    positive_examples = open(pos_file, "r").readlines()
+    random.shuffle(positive_examples)
+    positive_examples = list(positive_examples[:sample_size/2])
     positive_examples = [s.strip() for s in positive_examples]
-    negative_examples = list(open(neg_file, "r").readlines()[:15000])
+    negative_examples = open(neg_file, "r").readlines()
+    random.shuffle(negative_examples)
+    negative_examples = list(negative_examples[:sample_size/2])
     negative_examples = [s.strip() for s in negative_examples]
     # Split by words
     x_text = positive_examples + negative_examples
-    x_text = [clean_tweet(sent) for sent in x_text]
-    #x_text = [s.split(" ") for s in x_text]
-    #tknzr = TweetTokenizer()
-    #x_text = [tknzr.tokenize(s) for s in x_text]
+    x_text = [tokenize_str(sent) for sent in x_text]
 
     # Generate labels
     positive_labels = [[0, 1] for _ in positive_examples]
@@ -95,7 +83,7 @@ def build_vocab(vocab_file, sentences):
     Returns vocabulary mapping and inverse vocabulary mapping.
     """
 
-    #stopset = set(stopwords.words('english'))
+    stopset = set(stopwords.words('english'))
 
     # Load vocabulary file
     id2word = [] # Mapping from index to word
@@ -104,12 +92,14 @@ def build_vocab(vocab_file, sentences):
         for i, line in enumerate(reader(file, delimiter=" ")):
             id2word.append(line[0])
             word2id[line[0]] = i
-    # Add frequent words not in vocabulary
+
+    #Add frequent words not in vocabulary
     #word_counts = Counter(itertools.chain(*sentences))
-    #for i, x in enumerate(word_counts.most_common(1000)):
-        #if (x[1] > 100 and len(x[0]) >= 3 and x[0] not in stopset): 
-            #id2word.append(x[0])
-            #word2id[x[0]] = len(id2word) - 1
+    # Mapping from index to word
+    #id2word = [x[0] for x in word_counts.most_common()] # if x[1] > 10 and len(x[0]) >= 3 and x[0] not in stopset]
+    #id2word = list(sorted(id2word))
+    # Mapping from word to index
+    #word2id = {x: i for i, x in enumerate(id2word)}
 
     return [word2id, id2word]
 
@@ -118,21 +108,34 @@ def build_input_data(sentences, labels, word2id):
     """
     Maps sentencs and labels to vectors based on a vocabulary.
     """
-    x = np.array([[word2id[word] if word in word2id else 0 for word in sentence]
-        for sentence in sentences])
+    tot = mis = 0
+    x = []
+    for sentence in sentences:
+        sent = []
+        for word in sentence:
+            if word != "UNK": tot += 1
+            if word in word2id:
+                sent.append(int(word2id[word]))
+            else:
+                sent.append(int(0))
+                if word != "UNK": mis += 1
+        x.append(sent)
+    print "{} out of {} words are not in vocabulary.".format(mis, tot)
+    x = np.array(x)
+    #x = np.array([[word2id[word] if word in word2id else 0 for word in sentence]
+        #for sentence in sentences])
     y = np.array(labels)
-    print x
     return [x, y]
 
 
-def load_data(vocab_file, pos_file, neg_file, sequence_length):
+def load_data(vocab_file, pos_file, neg_file, sequence_length, sample_size=0):
     """
     Loads and preprocessed data. 
     Returns input vectors, labels, word-to-ID and ID-to-word mappings.
     """
 
     # Load and preprocess data
-    sentences, labels = load_data_and_labels(pos_file, neg_file)
+    sentences, labels = load_data_and_labels(pos_file, neg_file, sample_size)
     sentences_padded = pad_sentences(sentences, sequence_length)
 
     word2id, id2word = build_vocab(vocab_file, sentences)

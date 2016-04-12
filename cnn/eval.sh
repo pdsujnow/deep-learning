@@ -4,4 +4,4 @@ python eval.py \
 --pos_file=../sentiment140/test.pos.txt \
 --neg_file=../sentiment140/test.neg.txt \
 --vocab_file=./word2vec/vocab.txt \
---checkpoint_dir=/Users/zxing/cnn-output/checkpoints/
+--checkpoint_dir=/Users/zxing/cnn-checkpoints/
