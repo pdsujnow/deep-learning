@@ -53,7 +53,7 @@ print("")
 # Load data
 print("Loading data...")
 x, y, word2id, id2word = data_helpers.load_data(FLAGS.vocab_file, FLAGS.pos_file, 
-    FLAGS.neg_file, FLAGS.sequence_length, 60000)
+    FLAGS.neg_file, FLAGS.sequence_length, 110000)
 # Randomly shuffle data
 np.random.seed(10)
 shuffle_indices = np.random.permutation(np.arange(len(y)))
