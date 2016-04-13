@@ -13,3 +13,4 @@
 *.pyc
 checkpoint
 model.ckpt*
+checkpoints*

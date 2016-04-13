@@ -108,22 +108,22 @@ def build_input_data(sentences, labels, word2id):
     """
     Maps sentencs and labels to vectors based on a vocabulary.
     """
-    tot = mis = 0
-    x = []
-    for sentence in sentences:
-        sent = []
-        for word in sentence:
-            if word != "UNK": tot += 1
-            if word in word2id:
-                sent.append(int(word2id[word]))
-            else:
-                sent.append(int(0))
-                if word != "UNK": mis += 1
-        x.append(sent)
-    print "{} out of {} words are not in vocabulary.".format(mis, tot)
-    x = np.array(x)
-    #x = np.array([[word2id[word] if word in word2id else 0 for word in sentence]
-        #for sentence in sentences])
+    #tot = mis = 0
+    #x = []
+    #for sentence in sentences:
+    #    sent = []
+    #    for word in sentence:
+    #        if word != "UNK": tot += 1
+    #        if word in word2id:
+    #            sent.append(int(word2id[word]))
+    #        else:
+    #            sent.append(int(0))
+    #            if word != "UNK": mis += 1
+    #    x.append(sent)
+    #print "{} out of {} words are not in vocabulary.".format(mis, tot)
+    #x = np.array(x)
+    x = np.array([[word2id[word] if word in word2id else 0 for word in sentence]
+        for sentence in sentences])
     y = np.array(labels)
     return [x, y]
 
