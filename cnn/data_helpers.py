@@ -29,7 +29,8 @@ def tokenize_str(string):
     string = re.sub(r"\s{2,}", " ", string)
     tknzr = TweetTokenizer()
     words = tknzr.tokenize(string.lower())
-    words = [word for word in words if len(word) > 0 and word not in punctuation]
+    words = [word for word in words 
+    if len(word) > 0 and word not in punctuation]
     return words
 
 
@@ -93,14 +94,6 @@ def build_vocab(vocab_file, sentences):
             id2word.append(line[0])
             word2id[line[0]] = i
 
-    #Add frequent words not in vocabulary
-    #word_counts = Counter(itertools.chain(*sentences))
-    # Mapping from index to word
-    #id2word = [x[0] for x in word_counts.most_common()] # if x[1] > 10 and len(x[0]) >= 3 and x[0] not in stopset]
-    #id2word = list(sorted(id2word))
-    # Mapping from word to index
-    #word2id = {x: i for i, x in enumerate(id2word)}
-
     return [word2id, id2word]
 
 
@@ -108,20 +101,6 @@ def build_input_data(sentences, labels, word2id):
     """
     Maps sentencs and labels to vectors based on a vocabulary.
     """
-    #tot = mis = 0
-    #x = []
-    #for sentence in sentences:
-    #    sent = []
-    #    for word in sentence:
-    #        if word != "UNK": tot += 1
-    #        if word in word2id:
-    #            sent.append(int(word2id[word]))
-    #        else:
-    #            sent.append(int(0))
-    #            if word != "UNK": mis += 1
-    #    x.append(sent)
-    #print "{} out of {} words are not in vocabulary.".format(mis, tot)
-    #x = np.array(x)
     x = np.array([[word2id[word] if word in word2id else 0 for word in sentence]
         for sentence in sentences])
     y = np.array(labels)
