@@ -1,11 +1,9 @@
 import numpy as np
 import re
-import random
 import itertools
 from collections import Counter
 from csv import reader
 from nltk.tokenize import TweetTokenizer
-from nltk.corpus import stopwords
 from string import punctuation
 
 
@@ -41,13 +39,9 @@ def load_data_and_labels(pos_file, neg_file, sample_size):
     Returns split sentences and labels.
     """
     # Load data from files
-    positive_examples = open(pos_file, "r").readlines()
-    random.shuffle(positive_examples)
-    positive_examples = list(positive_examples[:sample_size/2])
+    positive_examples = list(open(pos_file, "r").readlines()[:sample_size/2])
     positive_examples = [s.strip() for s in positive_examples]
-    negative_examples = open(neg_file, "r").readlines()
-    random.shuffle(negative_examples)
-    negative_examples = list(negative_examples[:sample_size/2])
+    negative_examples = list(open(neg_file, "r").readlines()[:sample_size/2])
     negative_examples = [s.strip() for s in negative_examples]
     # Split by words
     x_text = positive_examples + negative_examples
@@ -83,8 +77,6 @@ def build_vocab(vocab_file, sentences):
     Builds a vocabulary mapping from word to index based on the sentences.
     Returns vocabulary mapping and inverse vocabulary mapping.
     """
-
-    stopset = set(stopwords.words('english'))
 
     # Load vocabulary file
     id2word = [] # Mapping from index to word

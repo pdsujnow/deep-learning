@@ -1,0 +1,7 @@
+\subsection{CNN}
+The {\tt word2vec} model proposed in \cite{} is used. The parameters of {\tt word2vec} model are set untrainable so this layer is essentially used as a mapping from word IDs to word embeddings. There're two reasons the parameters are set fixed:
+\begin{enumerate}
+\item To reduce the number of parameters need to be learnt.
+\item Tweets contain lots of noise, making the layer trainable exposes it to the noises, which may be counterproductive.
+\end{enumerate}
+Because of this layer, the CNN has a vocabulary determined by the {\tt word2vec} model, saved as a word-to-ID dictionary. During data preprocessing, each word is converted to an ID according to the dictionary.
