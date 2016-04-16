@@ -14,3 +14,5 @@
 checkpoint
 model.ckpt*
 checkpoints*
+text8
+*.bcf

@@ -1,7 +1,16 @@
 \subsection{CNN}
-The {\tt word2vec} model proposed in \cite{} is used. The parameters of {\tt word2vec} model are set untrainable so this layer is essentially used as a mapping from word IDs to word embeddings. There're two reasons the parameters are set fixed:
+
+The dataset used in the experiments is from the Stanford Twitter Sentiment corpus, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We composed a smaller training set of 25,000 positive and 25,000 negative examples from the original training set, and a smaller test set consists of all the 359 positive and negative examples from the original test set. 
+
+The CNN is implemented in TensorFlow, Google's deep learning library \footnote{\tt www.tensorflow.org}. The network structure is defined in Python, but the backend is implemented in C++, so the training and testing procedures run as C++ programs. The hyperparameters of the model are listed in Table \ref{}. 
+
+The {\tt word2vec} skip-gram model proposed in \cite{mikolov2013} is used for the word embedding layer. The size of the embeddings is 200, which means each word is converted to a 200-dimensional vector. The {\tt word2vec} model is pre-trained using a subset of the Google News data used \cite{mikolov2013} that consists of 17 million words, with a vocabulary of 71,291 words. After plugged into the CNN, the parameters of the {\tt word2vec} model, i.e., the word vectors, are set untrainable so this layer is a static lookup table. There're two reasons for fixing the parameters:
 \begin{enumerate}
 \item To reduce the number of parameters need to be learnt.
 \item Tweets contain lots of noise, making the layer trainable exposes it to the noises, which may be counterproductive.
 \end{enumerate}
-Because of this layer, the CNN has a vocabulary determined by the {\tt word2vec} model, saved as a word-to-ID dictionary. During data preprocessing, each word is converted to an ID according to the dictionary.
+Because of this layer, the vocabulary of the CNN is determined by the {\tt word2vec} model, saved as a word-to-index dictionary. During data preprocessing, each word is converted to an index according to the dictionary. 
+
+For the convolutional layer, there can be a number of a filters with different window sizes. In order to keep our model simple and small, only two windows sizes, 1 and 2, are used, and each window size has 128 filters. 
+
+The model is trained with data batches of 128 tweets for 10 epochs. We run the training and testing 20 times, the accuracy is 77.72\% on average. Even though this is not a very impressive performance, since our model has a very simple design and it is not optimized in any way, it still shows that there're lots of potentials in CNN.
