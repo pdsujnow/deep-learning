@@ -1,8 +1,14 @@
 \section{CNN for Twitter sentiment}
 
+\begin{figure}[htb]
+\centering
+  \includegraphics[width=0.8\linewidth]{figure/cnn.png}
+  \caption{Structure of CNN}\label{fig.cnn}
+\end{figure}
+
 \subsection{Network structure}
 
-The structure of the CNN used in our term project is shown in Figure \ref{}. It is a simplification of the model used in \cite{kim2014}. Although this model has a minimalist design, it has most of the typical layers of a text mining CNN: word embedding layer, convolutional layer, max-pooling layer, and fully-connected layer.
+The structure of the CNN used in our term project is shown in Figure \ref{fig.cnn}. It is a simplification of the model used in \cite{kim2014}. Although this model has a minimalist design, it has most of the typical layers of a text-mining CNN: word embedding layer, convolutional layer, max-pooling layer, and fully-connected layer.
 
 The first layer is the word embeddings, which is encoded as a weight matrix that is used as a lookup table. Each row of the weight matrix is a vector of size $k$ represents a unique word in the vocabulary. Given a sentence of length $n$, padded if necessary, each word is replaced by its corresponding vector and the sentence is converted to an output matrix that is a concatenation of all the embeddings. This output matrix is represented as
 $$

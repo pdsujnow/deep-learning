@@ -4,31 +4,23 @@ import itertools
 from collections import Counter
 from csv import reader
 from nltk.tokenize import TweetTokenizer
-from string import punctuation
 
 
 def tokenize_str(string):
     """
     Tokenize a string.
     """
-    #string = re.sub(r"(?:\@|https?\://)\S+", "", string.lower())
-    string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
-    string = re.sub(r"\'s", " \'s", string)
-    string = re.sub(r"\'ve", " \'ve", string)
-    string = re.sub(r"n\'t", " n\'t", string)
-    string = re.sub(r"\'re", " \'re", string)
-    string = re.sub(r"\'d", " \'d", string)
-    string = re.sub(r"\'ll", " \'ll", string)
-    string = re.sub(r",", " , ", string)
-    string = re.sub(r"!", " ! ", string)
-    string = re.sub(r"\(", " \( ", string)
-    string = re.sub(r"\)", " \) ", string)
-    string = re.sub(r"\?", " \? ", string)
+    string = re.sub(r"[^A-Za-z0-9()\']", " ", string)
+    string = re.sub(r"\'ve ", " have ", string)
+    string = re.sub(r"n\'t ", " not ", string)
+    string = re.sub(r"\'re ", " are ", string)
+    string = re.sub(r"\'ll ", " will ", string)
+    string = re.sub(r"\'m ", " am ", string)
+    string = re.sub(r"\'", " ", string)
     string = re.sub(r"\s{2,}", " ", string)
     tknzr = TweetTokenizer()
     words = tknzr.tokenize(string.lower())
-    words = [word for word in words 
-    if len(word) > 0 and word not in punctuation]
+    words = [word for word in words if word]
     return words
 
 

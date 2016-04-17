@@ -7,7 +7,7 @@
 *.synctex.gz
 *.out
 *.~
-
+*.pdf
 *.pkl
 *.d2v*
 *.pyc
