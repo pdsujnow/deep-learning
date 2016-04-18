@@ -1,3 +1,5 @@
+\section{Recurrent Neural Network}
+
 \subsection{LSTM}
 
 \begin{figure}[tbp]
@@ -19,6 +21,3 @@ $$
 Additionally, the model also consists of a mean pooling layer and a logistic regression layer. For every LSTM cell, it outputs information $h_i$. And by averaging all of the output sequence, mean pooling outputs $h$ and it is fed to the logistic regression layer. Then the logistic regression layer will train the model according to class labels and associated sequences.
 
 The LSTM model is implemented in Theano~\cite{bastien2012, bergstra2010}, which is a Python library for deep learning. It allows users to define, optimize and evaluate mathematical expression efficiently and conveniently. 
-
-
-
