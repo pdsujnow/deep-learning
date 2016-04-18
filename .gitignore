@@ -3,7 +3,6 @@
 *.log
 *.synctex.gz
 *.~
-*.pdf
 *.pkl
 *.d2v*
 *.pyc
