@@ -1,1 +1,45 @@
-\section{Doc2vec}
+\section{Classification with Paragraph Vector for Sentiment Analysis}
+
+\subsection{Paragraph Vector (doc2vec)}
+Distributed representation of words was first raised in~\cite{rumelhart1988}, and recently, Quoc Le et al.~\cite{le2014} raised {\textit{Paragraph Vector}}, an unsupervised algorithm that learns fixed length representation from variable-length pieces of texts, such as sentences and documents. Currently, this state-of-art technique provides promising results on text classification and sentiment analysis tasks.
+
+{\textit{Paragraph Vector}} consists of two representation models: distributed memory (DM) model and distributed bag of words. In the distributed memory model, every paragraph is mapped to an unique vector, and every work is also mapped to an unique vector. The paragraph vector and word vectors are averaged, summed, or concatenated together to predict next word in the context. And for the distributed bag of words (DBOW) model, it is to sample random words from the paragraph for the classification task.
+
+
+\subsection{Experiment}
+The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We removed all of the hashtag labels and urls, used {\tt TweetTokenizer} to tokenize the tweets, and finally removed all of the punctuations. 
+
+For the Paragraph Vector, we use implementation of models.doc2vec method in gensim library for the sentiment analysis task. The function supports both of distributed memory and distributed bag of words models. The parameters we select are shown in Table~\ref{tab:doc2vec}. Because of the long time of training the representation model, we randomly extract 10,000 positive tweets and 10,000 negative tweets from training dataset.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|l|l|}
+\hline
+Parameter  & Description                                                                                                                  & Value \\ \hline
+min\_count & ignore all words with total frequency lower than this                                                                        & 1     \\ \hline
+window     & \begin{tabular}[c]{@{}l@{}}maximum distance between the predicted word and \\ context words used for prediction\end{tabular} & 10    \\ \hline
+size       & dimensionality of the feature vectors                                                                                        & 100   \\ \hline
+sample     & \begin{tabular}[c]{@{}l@{}}threshold for configuring which higher-frequency \\ words are randomly downsampled\end{tabular}   & 1e-5  \\ \hline
+worker     & number of worker threads                                                                                                     & 12    \\ \hline
+\end{tabular}
+\caption{Parameters of \tt{doc2vec}.}
+\label{tab:doc2vec}
+\end{table}
+
+In the experiment, we compare the performance of distributed model whose word vectors are summed, averaged and concatenated, and distributed bag of words model. The evaluation result is shown in Table~\ref{tab:model}. For the classification, we evaluate and compare logistic regression, k-nearest neighbors, and random forest. 
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|c|}
+\hline
+\multicolumn{2}{|l|}{Model}      & Accuracy \\ \hline
+\multirow{3}{*}{DM} & dm\_mean   & 68.5     \\ \cline{2-3} 
+                    & dm\_concat & 62.1     \\ \cline{2-3} 
+                    & dm\_sum    &          \\ \hline
+\multicolumn{2}{|l|}{DBOW}       &          \\ \hline
+\end{tabular}
+\caption{Accuracies of different models with logistic regression.}
+\label{tab:model}
+\end{table}
+
+
