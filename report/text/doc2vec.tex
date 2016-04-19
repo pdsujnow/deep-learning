@@ -1,7 +1,7 @@
 \section{Classification with Paragraph Vector for Sentiment Analysis}
 
 \subsection{Paragraph Vector (doc2vec)}
-Distributed representation of words was first raised in~\cite{rumelhart1988}, and recently, Quoc Le et al.~\cite{le2014} raised {\textit{Paragraph Vector}}, an unsupervised algorithm that learns fixed length representation from variable-length pieces of texts, such as sentences and documents. Currently, this state-of-art technique provides promising results on text classification and sentiment analysis tasks.
+Distributed representation of words was first raised in~\cite{rumelhart1988}, and recently, Quoc Le et al.~\cite{le2014} proposed {\textit{Paragraph Vector}}, an unsupervised algorithm that learns fixed length representation from variable-length pieces of texts, such as sentences and documents. Currently, this state-of-art technique provides promising results on text classification and sentiment analysis tasks.
 
 {\textit{Paragraph Vector}} consists of two representation models: distributed memory (DM) model and distributed bag of words. In the distributed memory model, every paragraph is mapped to an unique vector, and every work is also mapped to an unique vector. The paragraph vector and word vectors are averaged, summed, or concatenated together to predict next word in the context. And for the distributed bag of words (DBOW) model, it is to sample random words from the paragraph for the classification task.
 
@@ -26,20 +26,33 @@ worker     & number of worker threads                                           
 \label{tab:doc2vec}
 \end{table}
 
-In the experiment, we compare the performance of distributed model whose word vectors are summed, averaged and concatenated, and distributed bag of words model. The evaluation result is shown in Table~\ref{tab:model}. For the classification, we evaluate and compare logistic regression, k-nearest neighbors, and random forest. 
+In the experiment, we compare the performance of distributed model whose word vectors are summed, averaged and concatenated, and distributed bag of words model. The evaluation result is shown in Table~\ref{tab:model}. From the table, we observe that dm\_sum achieves the highest accuracy of the four approaches. So in the next experiment, which is about comparison of classification algorithms, we use dm\_sum model for the training.
 
 \begin{table}[]
 \centering
 \begin{tabular}{|l|l|c|}
 \hline
 \multicolumn{2}{|l|}{Model}      & Accuracy \\ \hline
-\multirow{3}{*}{DM} & dm\_mean   & 68.5     \\ \cline{2-3} 
+\multirow{3}{*}{DM} & dm\_mean   & 73.0     \\ \cline{2-3} 
                     & dm\_concat & 62.1     \\ \cline{2-3} 
-                    & dm\_sum    &          \\ \hline
-\multicolumn{2}{|l|}{DBOW}       &          \\ \hline
+                    & dm\_sum    & 73.5     \\ \hline
+\multicolumn{2}{|l|}{DBOW}       & 68.5     \\ \hline
 \end{tabular}
-\caption{Accuracies of different models with logistic regression.}
+\caption{Accuracies(\%) of different models with logistic regression.}
 \label{tab:model}
 \end{table}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+         & LR            & SVM  & RF   & KNN   & NB   \\ \hline
+Accuracy & \textbf{73.5} & 72.9 & 58.2 & 59.6  & 66.6 \\ \hline
+\end{tabular}
+\caption{Accuracies(\%) of different classifiers. LR: Logistic Regression. SVM: Support Vector Machine. RF: Random Forest. KNN: K-Nearest Neighbors. NB: Naive Bayes.}
+\label{tab:classifier}
+\end{table}
+
+For the classification, we evaluate and compare logistic regression, k-nearest neighbors, and random forest. And the performance of these classifiers is demonstrated in Table~\ref{tab:classifier}. From the table, we summarize that logistic regression obtains the best classification performance of the classifiers, and the accuracy is 72.7\%.
 
 
