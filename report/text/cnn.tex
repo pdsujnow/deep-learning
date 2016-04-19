@@ -1,4 +1,4 @@
-\section{Convolutional Neural Network}
+\section{Convolutional Neural Network for Twitter sentiment}
 
 \subsection{Network structure}
 
@@ -53,7 +53,7 @@ dropout probability & 0.5 \\
 
 The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \footnote{\tt http://help.sentiment140.com/for-students/}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We composed a smaller training set of 25,000 positive and 25,000 negative examples from the original training set, and a smaller test set consists of all the 359 positive and negative examples from the original test set. The data is preprocessed to remove punctuations and other symbols like ``\#'' and ``@'', and to separate word contractions, e.g. ``don't'' to ``do not''. Each sentence is then tokenized by the {\tt TweetTokenizer} provided in Python NLTK \footnote{\tt http://www.nltk.org} library and padded to 200 tokens as necessary. 
 
-The CNN is implemented in TensorFlow, Google's deep learning library \footnote{\tt https://www.tensorflow.org}. The network structure is defined in Python, but the backend is implemented in C++, so the training and testing procedures run as C++ programs. The hyperparameters of the model are listed in Table \ref{tbl.cnn.param}. 
+The CNN is implemented in TensorFlow \footnote{\tt https://www.tensorflow.org}, Google's deep learning library \cite{abadi2016}. The network structure is defined in Python, but the backend is implemented in C++, so the training and testing procedures run as C++ programs. The hyperparameters of the model are listed in Table \ref{tbl.cnn.param}. 
 
 The skip-gram {\tt word2vec} model proposed in \cite{mikolov2013} is used for the word embedding layer. The size of the embeddings is 200. The embedding model is pretrained using a subset of the Google News data used in \cite{mikolov2013} that consists of 17 million words, with a vocabulary of 71,291 words. After plugged into the CNN, the parameters of the {\tt word2vec} model are set untrainable so it becomes a static lookup table. There're two reasons for fixing the parameters:
 \begin{enumerate}
@@ -64,4 +64,4 @@ Because of this layer, the vocabulary of the CNN is determined by the {\tt word2
 
 For the convolutional layer, there can be a number of a filters with different window sizes. In order to keep our model simple and small, only two windows sizes, 1 and 2, are used, and each window size has 128 filters. 
 
-The model is trained with data batches of 128 tweets for 10 epochs. On a computer with 2.8GHz quad-core CPU and 16GB of memory, given pretrained {\tt word2vec} model, the CNN model can be trained and tested well under half an hour. We run the training and testing 20 times, and obtained an average accuracy of 77.72\%. Although this is not a very impressive performance, since our model has a very simple design and it is not optimized in any way, it still shows that there're lots of potentials in CNN.
+The model is trained with data batches of 128 tweets for 10 epochs. On a computer with 2.8GHz quad-core CPU and 16GB of memory, given pretrained {\tt word2vec} model, the CNN model can be trained and tested well under half an hour. We run the training and testing 20 times, and obtained an average accuracy of 79.60\%. Although this is not a very impressive performance, since our model has a very simple design and it is not optimized in any way, it still shows that there're lots of potentials in CNN.
