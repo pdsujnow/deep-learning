@@ -57,7 +57,8 @@ def clean_data(input_file_name, output_file_name):
 
 
 if __name__ == '__main__':
-    clean_data('../sentiment140/train.pos.txt', 'train_pos.txt')
-    clean_data('../sentiment140/train.neg.txt', 'train_neg.txt')
-    clean_data('../sentiment140/test.pos.txt', 'test_pos.txt')
-    clean_data('../sentiment140/test.neg.txt', 'test_neg.txt')
+    clean_data('../../sentiment140/train.pos.txt', 'train_pos.txt')
+    clean_data('../../sentiment140/train.neg.txt', 'train_neg.txt')
+    clean_data('../../sentiment140/test.pos.txt', 'test_pos.txt')
+    clean_data('../../sentiment140/test.neg.txt', 'test_neg.txt')
+
