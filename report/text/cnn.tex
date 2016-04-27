@@ -8,7 +8,7 @@
   \caption{Structure of CNN}\label{fig.cnn}
 \end{figure}
 
-The structure of the CNN used in our term project is shown in Figure \ref{fig.cnn}. It is a simplification of the model used in \cite{kim2014}. Although this model has a minimalist design, it has most of the typical layers of a text-mining CNN: word embedding layer, convolutional layer, max-pooling layer, and fully-connected layer.
+The structure of the CNN used in our term project is shown in Figure \ref{fig.cnn}, where the parameters are chosen sololy for visualization. The structure is a simplification of the model used in \cite{kim2014}. Although this model has a minimalist design, it has most of the typical layers of a text-mining CNN: word embedding layer, convolutional layer, max-pooling layer, and fully-connected layer.
 
 The first layer is the word embeddings, which is encoded as a weight matrix that is used as a lookup table. Each row of the weight matrix is a vector of size $k$ represents a unique word in the vocabulary. Given a sentence of length $n$, padded if necessary, each word is replaced by its corresponding vector and the sentence is converted to an output matrix that is a concatenation of all the embeddings. This output matrix is represented as
 $$
@@ -51,7 +51,9 @@ dropout probability & 0.5 \\
 \caption{Hyperparameters of CNN model}\label{tbl.cnn.param}
 \end{table}
 
-The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We composed a smaller training set of 25,000 positive and 25,000 negative examples from the original training set, and a smaller test set consists of all the 359 positive and negative examples from the original test set. The data is preprocessed to remove punctuations and other symbols like ``\#'' and ``@'', and to separate word contractions, e.g. ``don't'' to ``do not''. Each sentence is then tokenized by the {\tt TweetTokenizer} provided in Python NLTK \cite{bird2006} library and padded to 200 tokens as necessary. 
+The dataset used in the experiments is the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We compose a smaller training set of 25,000 positive and 25,000 negative tweets randomly sampled from the original, a validation set of 2,500 positive and 2,500 negative tweets randomly sampled from the {\em rest} of the original, and a smaller test set consists of only the 359 positive or negative tweets, excluding the neutral ones, from the original. The validation set is used for setting some of the training parameters such as the number of training epochs. 
+
+The data is preprocessed to remove punctuations and other symbols like ``\#'' and ``@'', and to separate word contractions, e.g. ``don't'' to ``do not''. Each sentence is then tokenized by the {\tt TweetTokenizer} provided in Python NLTK \cite{bird2006} library and padded to 200 tokens as necessary. 
 
 The CNN is implemented in TensorFlow, Google's deep learning library \cite{abadi2016}. The network structure is defined in Python, but the backend is implemented in C++, so the training and testing procedures run as C++ programs. The hyperparameters of the model are listed in Table \ref{tbl.cnn.param}. 
 
@@ -64,4 +66,6 @@ Because of this layer, the vocabulary of the CNN is determined by the {\tt word2
 
 For the convolutional layer, there can be a number of a filters with different window sizes. In order to keep our model simple and small, only two windows sizes, 1 and 2, are used, and each window size has 128 filters. 
 
-The model is trained with data batches of 128 tweets for 10 epochs. On a computer with 2.8GHz quad-core CPU and 16GB of memory, given pretrained {\tt word2vec} model, the CNN model can be trained and tested well under half an hour. We run the training and testing 20 times, and obtained an average accuracy of 79.60\%. Although this is not a very impressive performance, since our model has a very simple design and it is not optimized in any way, it still shows that there're lots of potentials in CNN.
+The model is trained with data batches of 128 tweets for 10 epochs. On a computer with 2.8GHz quad-core CPU and 16GB of memory, given pretrained {\tt word2vec} model, the CNN model can be trained and tested well under half an hour. We ran the train-test iteration 20 times, and obtained an average accuracy of 79.60\%. Although this is not a state-of-art performance, since our model has a very simple design and it is not optimized at all, it shows great potential of CNN for text mining in social media.
+
+We also tried tweaking the hyperparameters in various ways, but didn't get significant improvement. For example, with ``filter window size'' set to ``1, 2, 3'', and the number of training epochs changed to 30, the average accuracy of 20 train-test iterations becomes 78.65\%. The number of epochs is increased because the convergence time is longer due to more parameters to learn. The training time in this case is over 4 hours. 
