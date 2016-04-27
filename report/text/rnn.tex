@@ -43,6 +43,21 @@ $$
 Additionally, the model also consists of a mean pooling layer and a logistic regression layer. For every LSTM cell, it outputs information $h_i$. And by averaging all of the output sequence, mean pooling outputs $h$ and it is fed to the logistic regression layer. Then the logistic regression layer will train the model according to class labels and associated sequences.
 
 \subsection{Experiment}
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|c|}
+		\hline
+		Parameter          & Value \\ \hline
+		\# of hidden units & 128   \\ \hline
+		max length         & 40    \\ \hline
+		batch size         & 16    \\ \hline
+		test size          & 359   \\ \hline
+	\end{tabular}
+	\caption{My caption}
+	\label{my-label}
+\end{table}
+
 For the LSTM model for sentiment analysis, we design and evaluate the model on two different kinds of sentiment data sets. The first one is the Stanford Twitter corpus, which has been described in previous section. And the second data set is the Large Movie Review Dataset~\cite{maas2011}, which consists of 25,000 highly polar movie reviews for training, and 25,000 reviews for testing. In the 25,000 training reviews, there are 12,500 positive reviews and 12,500 negative reviews.
 
 During the pre-processing step, we utilize the count-based method to represent the words in the data sets. A count-based approach takes advantage of the assumption that words which have similar counts in a text context, share similar semantic meaning. This approach is opposite to context-predicting semantic vectors such as {\tt word2vec} which is used in our experiment of CNN. The difference between the two word representation models were discussed in~cite{baroni2014}. 
