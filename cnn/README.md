@@ -17,7 +17,7 @@ This package works on Linux and OS X.
 
 `eval.sh` -- example Bash script for running `eval.py`.
 
-`word2vec/word2vec_optimized.py` -- Python script for training a `word2vec` model, taken from [TensorFlow](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/embedding/word2vec_optimized.py).
+`word2vec/word2vec_optimized.py` -- Python script for training a word embedding model, `word2vec`, taken from [TensorFlow](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/embedding/word2vec_optimized.py).
 
 `word2vec/vocab.txt` -- vocabulary file contains all the words recognizable by the `word2vec` model.
 
@@ -42,7 +42,7 @@ This package works on Linux and OS X.
 4. The above command produces the `model.ckpt-2265405` file, a pretrained `word2vec` model. `2265405` is the number of steps used in training the model. 
 
 
-## Train `word2vec` Model
+## Train Word Embedding Model
 
 1. The word embedding model `word2vec` is needed by the CNN model, so it needs to be pretrained if necessary.
 
