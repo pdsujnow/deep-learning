@@ -5,17 +5,17 @@ This package works on Linux and OS X.
 
 ## Files
 
-`data_helpers.py` -- some helper functions for data processsing, modified from [Denny Britz's repo](https://github.com/dennybritz/cnn-text-classification-tf).
+`data_helpers.py` -- some helper functions for data processsing.
 
-`text_cnn.py` -- `TextCNN` class that defines the network structure, modified from [Denny Britz's repo](https://github.com/dennybritz/cnn-text-classification-tf).
+`text_cnn.py` -- `TextCNN` class that defines the network structure.
 
-`train.py` -- the training procedure, modified from [Denny Britz's repo](https://github.com/dennybritz/cnn-text-classification-tf).
+`train.py` -- the training procedure.
 
-`eval.py` -- the test procedure, modified from [Denny Britz's repo](https://github.com/dennybritz/cnn-text-classification-tf).
+`eval.py` -- the test procedure, this and the above files are modified from [Denny Britz's repo](https://github.com/dennybritz/cnn-text-classification-tf).
 
-`train.sh` -- example Bash script for running `train.py`.
+`train.sh` -- example script for running `train.py`.
 
-`eval.sh` -- example Bash script for running `eval.py`.
+`eval.sh` -- example script for running `eval.py`.
 
 `word2vec/word2vec_optimized.py` -- Python script for training a word embedding model, `word2vec`, taken from [TensorFlow](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/embedding/word2vec_optimized.py).
 
@@ -62,7 +62,7 @@ This package works on Linux and OS X.
 
 1. The following descriptions assumes the pretrained `word2vec` model is used. If it is retrained, replace `model.ckpt-2265405` with the new file name.
 
-2. The Python script `train.py` defines the training procedure. To get help info on the parameters, use the following command:
+2. `train.py` defines the training procedure. To get help info on the parameters, use the following command:
 
    ```bash
    python train.py --help
@@ -81,13 +81,13 @@ This package works on Linux and OS X.
 
 ## Test CNN Model
 
-1. The Python script `eval.py` defines the test procedure. To get help info on the parameters, use the following command:
+1. `eval.py` defines the test procedure. To get help info on the parameters, use the following command:
 
    ```bash
    python eval.py --help
    ```
 
-2. To test a saved model with the default parameters, use `eval.sh` or the following command:
+2. To test a model with the default parameters, use `eval.sh` or the following command:
 
    ```bash
    python eval.py \
