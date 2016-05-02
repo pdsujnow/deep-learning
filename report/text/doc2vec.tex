@@ -9,7 +9,7 @@ Distributed representation of words was first raised in~\cite{rumelhart1988}, an
 \subsection{Experiment}
 The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We removed all of the hashtag labels and urls, used {\tt TweetTokenizer} to tokenize the tweets, and finally removed all of the punctuations. 
 
-For the Paragraph Vector, we use implementation of models.doc2vec method in gensim library for the sentiment analysis task. The function supports both of distributed memory and distributed bag of words models. The parameters we select are shown in Table~\ref{tab:doc2vec}. Because of the long time of training the representation model, we randomly extract 10,000 positive tweets and 10,000 negative tweets from training dataset.
+For the Paragraph Vector, we use implementation of {\tt models.doc2vec} method in gensim library for the sentiment analysis task. The function supports both of distributed memory and distributed bag of words models. The parameters we select are shown in Table~\ref{tab:doc2vec}. Because of the long time of training the language model, we randomly extract 10,000 positive tweets and 10,000 negative tweets from training dataset. We train the model on a server with 2.0GHz 12-core CPU and 128GB memory. It takes about 2 hours to complete.
 
 \begin{table}[]
 \centering
@@ -26,7 +26,7 @@ worker     & number of worker threads                                           
 \label{tab:doc2vec}
 \end{table}
 
-In the experiment, we compare the performance of distributed model whose word vectors are summed, averaged and concatenated, and distributed bag of words model. The evaluation result is shown in Table~\ref{tab:model}. From the table, we observe that dm\_sum achieves the highest accuracy of the four approaches. So in the next experiment, which is about comparison of classification algorithms, we use dm\_sum model for the training.
+In the experiment, we compare the performance of distributed model whose word vectors are summed, averaged and concatenated, and distributed bag of words model. The evaluation result is shown in Table~\ref{tab:model}. The classification performance is obtained by applying logistic regression on the models. From the table, we observe that dm\_sum achieves the highest accuracy of the four approaches. So in the next experiment, which is about comparison of classification algorithms, we use dm\_sum model for the training. Another interesting result is that dm\_sum and dm\_mean have similar performance in this test. This may be because of the fact that mean is just sum divided by count, and dm\_sum and dm\_mean are similar models.
 
 \begin{table}[]
 \centering
@@ -53,6 +53,6 @@ Accuracy & \textbf{73.5} & 72.9 & 58.2 & 59.6  & 66.6 \\ \hline
 \label{tab:classifier}
 \end{table}
 
-For the classification, we evaluate and compare logistic regression, k-nearest neighbors, and random forest. And the performance of these classifiers is demonstrated in Table~\ref{tab:classifier}. From the table, we summarize that logistic regression obtains the best classification performance of the classifiers, and the accuracy is 72.7\%.
+For the classification, we evaluate and compare logistic regression, k-nearest neighbors, and random forest. And the performance of these classifiers is demonstrated in Table~\ref{tab:classifier}. From the table, we summarize that logistic regression obtains the best classification performance of the classifiers, and the accuracy is 73.5\%. Additionally, SVM can also achieve a relatively high performance, which is similar to logistic regression. While, for some traditional classifiers for natural language processing, such as Naive Bayes, their performance is relatively low.
 
 
