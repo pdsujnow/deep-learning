@@ -7,7 +7,7 @@ Distributed representation of words was first raised in~\cite{rumelhart1988}, an
 
 
 \subsection{Experiment}
-The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. We removed all of the hashtag labels and urls, used {\tt TweetTokenizer} to tokenize the tweets, and finally removed all of the punctuations. 
+The dataset used in the experiments is from the Stanford Twitter Sentiment corpus \cite{go2009}, which consists of 1.6 million two-class machine-labeled tweets for training, and 498 three-class hand-labeled tweets for test. In our experiment, we tested our models on 359 two-class tweets. For our model, we We removed all of the hashtag labels and urls, used {\tt TweetTokenizer} to tokenize the tweets, and finally removed all of the punctuations. 
 
 For the Paragraph Vector, we use implementation of {\tt models.doc2vec} method in gensim library for the sentiment analysis task. The function supports both of distributed memory and distributed bag of words models. The parameters we select are shown in Table~\ref{tab:doc2vec}. Because of the long time of training the language model, we randomly extract 10,000 positive tweets and 10,000 negative tweets from training dataset. We train the model on a server with 2.0GHz 12-core CPU and 128GB memory. It takes about 2 hours to complete.
 
