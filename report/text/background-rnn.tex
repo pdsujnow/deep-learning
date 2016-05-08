@@ -6,7 +6,7 @@ The model of a classical RNN is shown in Figure~\ref{fig:rnn}. In the left of th
 $$\textbf{A}_t = f(U\textbf{X}_t + W\textbf{A}_{t-1})$$
 where $\textbf{A}_t$ is the hidden state of time $\textbf{t}$, $\textbf{X}_t$ is the input of current state, and function $\textbf{f}$ is the transition function for every time step. Please notice that for every time step, the weights $\textbf{V}$, $\textbf{W}$ and $\textbf{U}$ are the same, which means that the training needs to find the optimization points at every time step in the model. And this makes the neural network rather deep.
 
-\begin{figure}
+\begin{figure}[b]
 \centering
 \includegraphics[scale=0.6]{figure/rnn.pdf}
 \caption{Architecture of Recurrent Neural Network.}
